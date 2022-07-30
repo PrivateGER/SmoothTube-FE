@@ -1,4 +1,6 @@
 <script>
+    import {Link} from "svelte-routing";
+
     export let videoID;
     let videoPromise = getVideoInfo(videoID);
     async function getVideoInfo(id) {
@@ -13,21 +15,22 @@
     function prefixURL(resource) {
         return `${window.localStorage.getItem('baseurl')}${resource}`
     }
-    function authFetchImage() {
-
-    }
 </script>
 
 {#await videoPromise}
-    Loading...
+    <div>
+        <div class="card" style="max-width: 290px; padding: 10px;">
+            <progress class="progress is-large is-info" max="100">60%</progress>
+        </div>
+    </div>
 {:then video}
     <div>
         <div class="card" style="max-width: 290px; padding: 10px;">
             <div class="card-image">
                 <figure class="image">
-                    <a href="/view?id={ video.data.youtube_id }">
+                    <Link to="/view/{ video.data.youtube_id }">
                         <img class="image" alt="Video thumbnail" style="width: 240px; height: 135px; margin-left: auto; margin-right: auto; display: block" src="{ prefixURL(video.data.vid_thumb_url) }">
-                    </a>
+                    </Link>
                 </figure>
             </div>
             <div class="card-content">

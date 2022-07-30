@@ -2,10 +2,7 @@
     import VideoPreview from "./VideoPreview.svelte";
     let videoPromise = getVideoList();
     async function getVideoList() {
-        const res = await fetch(`${window.localStorage.getItem("baseurl")}/api/video/?format=json`, {
-
-
-        })
+        const res = await fetch(`${window.localStorage.getItem("baseurl")}/api/video/?format=json`);
 
         if(res.ok) {
             return await res.json();
@@ -16,7 +13,7 @@
 </script>
 
 {#await videoPromise}
-    Loading...
+    <progress class="progress is-large is-info" max="100">60%</progress>
 {:then videos}
     <div class="is-flex is-flex-wrap-wrap" style="gap: 10px !important;">
         {#each videos.data as video}
@@ -26,3 +23,4 @@
 {:catch error}
     <p style="color: red">{error}</p>
 {/await}
+

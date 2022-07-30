@@ -1,9 +1,10 @@
 <script>
-  import svelteLogo from './assets/svelte.svg'
-  import Counter from './lib/Counter.svelte'
-  import Video from "./components/VideoPreview.svelte";
   import VideoPreview from "./components/VideoPreview.svelte";
-  import Search from "./components/Search.svelte";
+  import List from "./components/List.svelte";
+  import {Link, Route, Router} from "svelte-routing";
+  import Landing from "./components/Landing.svelte";
+  import Video from "./components/Video.svelte";
+
 
   window.addEventListener('load', () => {
     if (!('serviceWorker' in navigator)) {
@@ -31,37 +32,51 @@
         }
       })
   })
+
+  export let url;
 </script>
 
 <main>
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite Logo" />
-    </a>
-    <a href="https://svelte.dev" target="_blank">
-      <img src={svelteLogo} class="logo svelte" alt="Svelte Logo" />
-    </a>
-  </div>
-  <h1>Vite + Svelte</h1>
+  <Router url="{url}">
+    <nav aria-label="main navigation" class="navbar" role="navigation">
+      <div class="navbar-brand">
+        <Link to="/" class="navbar-item">
+          SmoothTube-FE
+        </Link>
+      </div>
 
-  <div class="card">
-    <Counter />
-  </div>
+      <div class="navbar-menu" id="navbarApp">
+        <div class="navbar-start">
+          <Link to="/list" class="navbar-item">
+            List
+          </Link>
+        </div>
 
-  <p>
-    Check out <a href="https://github.com/sveltejs/kit#readme" target="_blank">SvelteKit</a>, the official Svelte app framework powered by Vite!
-  </p>
+        <div class="navbar-end">
+          <div class="navbar-item">
+            <div class="buttons">
+              <a class="button is-primary">
+                <strong>Sign up</strong>
+              </a>
+              <a class="button is-light">
+                Log in
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <div style="padding: 20px;">
+      <Route path="/"><Landing /></Route>
+      <Route component="{List}" path="/list"></Route>
+      <Route component="{Video}" path="/view/:videoID" />
 
-  <p class="read-the-docs">
-    Click on the Vite and Svelte logos to learn more
-  </p>
-
-  <Search></Search>
+    </div>
+  </Router>
 </main>
 
 <style>
-  @import "https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.css";
-  @import "https://jenil.github.io/bulmaswatch/darkly/bulmaswatch.min.css";
+
 
   .logo {
     height: 6em;
