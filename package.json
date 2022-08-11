@@ -11,9 +11,14 @@
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^1.0.1",
     "svelte": "^3.49.0",
+    "video.js": "^7.20.1",
     "vite": "^3.0.0"
   },
   "dependencies": {
-    "svelte-routing": "^1.6.0"
+    "bulma": "^0.9.4",
+    "fontawesome-free": "^1.0.4",
+    "sass": "^1.54.4",
+    "svelte-routing": "^1.6.0",
+    "videojs-css": "^1.2.0"
   }
 }

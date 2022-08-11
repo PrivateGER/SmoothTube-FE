@@ -4,6 +4,7 @@
   import {Link, Route, Router} from "svelte-routing";
   import Landing from "./components/Landing.svelte";
   import Video from "./components/Video.svelte";
+  import Settings from "./components/Settings.svelte";
 
 
   window.addEventListener('load', () => {
@@ -33,7 +34,7 @@
       })
   })
 
-  export let url;
+  let url;
 </script>
 
 <main>
@@ -47,8 +48,11 @@
 
       <div class="navbar-menu" id="navbarApp">
         <div class="navbar-start">
-          <Link to="/list" class="navbar-item">
+          <Link to="/list/1" class="navbar-item">
             List
+          </Link>
+          <Link to="/settings" class="navbar-item">
+            Settings
           </Link>
         </div>
 
@@ -68,9 +72,9 @@
     </nav>
     <div style="padding: 20px;">
       <Route path="/"><Landing /></Route>
-      <Route component="{List}" path="/list"></Route>
+      <Route component="{List}" path="/list/:pageIndex"></Route>
       <Route component="{Video}" path="/view/:videoID" />
-
+      <Route component="{Settings}" path="/settings" />
     </div>
   </Router>
 </main>

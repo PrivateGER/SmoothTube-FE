@@ -25,7 +25,7 @@
     </div>
 {:then video}
     <div>
-        <div class="card" style="max-width: 290px; padding: 10px;">
+        <div class="card" style="max-width: 350px; padding: 10px;">
             <div class="card-image">
                 <figure class="image">
                     <Link to="/view/{ video.data.youtube_id }">
@@ -45,4 +45,5 @@
     </div>
 {:catch error}
     <p style="color: red">{error}</p>
+    Did you set the base url and token in the settings?
 {/await}
