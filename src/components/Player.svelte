@@ -13,6 +13,7 @@
 <script>
     import videojs from "video.js";
     import "videojs-css";
+    import "@videojs/http-streaming/dist/videojs-http-streaming.min"
     import {afterUpdate, tick} from "svelte";
 
     export let thumbnail;
@@ -48,7 +49,9 @@
                 transform:"translate(-50%,-50%)",
                 background:"#1267bb"
             },
-
+        });
+        player.reloadSourceOnError({
+            errorInterval: 1
         });
         console.log("videojs player initialized")
     }

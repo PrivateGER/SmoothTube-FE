@@ -1,6 +1,15 @@
 let authToken = "";
 let baseURL = "egklesmg";
 
+const swBroadcast = new BroadcastChannel("swBroadcast");
+swBroadcast.onmessage = function (event) {
+    authToken = event.data.authToken;
+    baseURL = event.data.baseURL;
+
+    console.log("Set auth token to " + authToken);
+    console.log("Set baseurl to " + baseURL);
+}
+
 self.addEventListener('fetch', event => {
     if (!event.request.url.startsWith(baseURL)) {
         console.log("Didn't intercept request to " + event.request.url)
@@ -34,3 +43,11 @@ function customHeaderRequestFetch(event) {
     console.log("Intercepted request to " + event.request.url)
     return fetch(newRequest)
 }
+
+self.addEventListener('install', () => {
+    self.skipWaiting(); //tells service worker to skip installing and activate it
+});
+
+self.addEventListener('activate', () => {
+    clients.claim();
+});

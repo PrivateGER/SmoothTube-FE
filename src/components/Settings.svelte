@@ -15,6 +15,48 @@
         window.location.reload();
     }
 
+    function loadSW() {
+        if (!('serviceWorker' in navigator)) {
+            console.error("SW not supported")
+            return
+        }
+
+        navigator.serviceWorker.register('/sw.js').then(
+            () => {
+                console.log("SW registered")
+
+            },
+            err => {
+                console.error('SW registration failed! 😱', err)
+            }
+        )
+
+        navigator.serviceWorker.ready
+            .then((reg) => reg.update())
+            .then((reg) => {
+                reg.update()
+                if (reg.active) {
+                    const broadcast = new BroadcastChannel("swBroadcast");
+                    broadcast.postMessage({
+                        authToken: window.localStorage.getItem("token"),
+                        baseURL: window.localStorage.getItem("baseurl")
+                    })
+                    setTimeout(() => { window.location.reload() }, 10);
+                }
+            })
+    }
+
+    function removeSW() {
+        navigator.serviceWorker.getRegistrations().then((registrations) => {
+            for(let registration of registrations) {
+                registration.unregister();
+            }
+            setTimeout(() => {
+                window.location.reload();
+            }, 10);
+        });
+    }
+
     let token;
     let baseurl;
     let thirdpartyviewer;
@@ -78,6 +120,13 @@
         </div>
         <div class="message-body">
             <p><i class="fa-solid fa-circle-check"></i> Service Worker is loaded and running.</p>
+            <br />
+            <button class="button is-primary has-icons-left is-outlined" on:click={removeSW}>
+                <span class="icon is-small">
+                    <i class="fa-solid fa-trash-can"></i>
+                </span>
+                <span>Uninstall Service Worker</span>
+            </button>
         </div>
     </article>
 {:else}
@@ -86,7 +135,14 @@
             <p>Service Worker Status</p>
         </div>
         <div class="message-body">
-            <p><i class="fa-solid fa-circle-xmark"></i> Service Worker is not loaded or not supported. Try to reload the page (without a hard refresh).</p>
+            <p><i class="fa-solid fa-circle-xmark"></i> Service Worker is not loaded or not supported.</p>
+            <br />
+            <button class="button is-danger has-icons-left" on:click={loadSW}>
+                <span class="icon is-small">
+                    <i class="fa-solid fa-cloud-arrow-down"></i>
+                </span>
+                <span>Load Service Worker</span>
+            </button>
         </div>
     </article>
 {/if}

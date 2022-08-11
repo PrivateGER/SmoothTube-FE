@@ -6,34 +6,6 @@
   import Video from "./components/Video.svelte";
   import Settings from "./components/Settings.svelte";
 
-
-  window.addEventListener('load', () => {
-    if (!('serviceWorker' in navigator)) {
-      console.error("SW not supported")
-      return
-    }
-
-    navigator.serviceWorker.register('/sw.js').then(
-      () => {
-        console.log("SW registered")
-
-      },
-      err => {
-        console.error('SW registration failed! 😱', err)
-      }
-    )
-
-    navigator.serviceWorker.ready
-      .then((reg) => reg.update())
-      .then((reg) => {
-        reg.update()
-        if (reg.active) {
-          reg.active.postMessage(`auth${window.localStorage.getItem("token")}`);
-          reg.active.postMessage(`base${window.localStorage.getItem("baseurl")}`)
-        }
-      })
-  })
-
   let url;
 </script>
 
@@ -54,19 +26,6 @@
           <Link to="/settings" class="navbar-item">
             Settings
           </Link>
-        </div>
-
-        <div class="navbar-end">
-          <div class="navbar-item">
-            <div class="buttons">
-              <a class="button is-primary">
-                <strong>Sign up</strong>
-              </a>
-              <a class="button is-light">
-                Log in
-              </a>
-            </div>
-          </div>
         </div>
       </div>
     </nav>
