@@ -15,7 +15,18 @@ self.addEventListener('fetch', event => {
         console.log("Didn't intercept request to " + event.request.url)
         return
     }
-    event.respondWith(customHeaderRequestFetch(event))
+
+    return event.respondWith(
+        caches.match(event.request).then(function (response) {
+            if (response) {
+                console.log("Found " + event.request.url + " in cache")
+                return response
+            } else {
+                console.log("Didn't find " + event.request.url + " in cache")
+                return customHeaderRequestFetch(event)
+            }
+        })
+    );
 })
 
 self.addEventListener("message", (evt) => {
@@ -41,7 +52,16 @@ function customHeaderRequestFetch(event) {
         credentials: "include"
     })
     console.log("Intercepted request to " + event.request.url)
-    return fetch(newRequest)
+
+    return caches.open("sw-cache").then(function (cache) {
+        return fetch(newRequest).then(function (response) {
+            // don't cache videos and don't cache list results
+            if(response.ok && !response.url.endsWith(".mp4") && !response.url.includes("/video/?format=json")) {
+                cache.put(event.request, response.clone());
+            }
+            return response;
+        });
+    });
 }
 
 self.addEventListener('install', () => {
